@@ -1,0 +1,16 @@
+﻿version: "3.7"
+
+services:
+  db:
+    container_name: books_db
+    image: postgres:14.3
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432/tcp"
+    environment:
+      POSTGRES_USER: ${BOOKS_STORAGE_USER}
+      POSTGRES_PASSWORD: ${BOOKS_STORAGE_PASSWORD}
+      POSTGRES_DB: ${BOOKS_STORAGE_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U dev_local", "-d dev_local"]

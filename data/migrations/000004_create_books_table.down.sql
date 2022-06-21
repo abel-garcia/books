@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS books;
+DROP TYPE IF EXISTS book_status;
+DROP TRIGGER IF EXISTS set_timestamp ON books;
