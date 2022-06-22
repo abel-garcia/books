@@ -5,14 +5,14 @@ CREATE TABLE IF NOT EXISTS books(
     google_id VARCHAR (50) NOT NULL,
 	author VARCHAR (50) NOT NULL,
     title VARCHAR (50) NOT NULL,
-    status book_status NOT NULL DEFAULT 'active',
+    status book_status DEFAULT 'active',
     publisher VARCHAR (50) NOT NULL,
 	user_id uuid NOT NULL,
-    wishlist_id uuid,
+    wish_list_id uuid,
 	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(wishlist_id) REFERENCES wishlists(id) ON DELETE CASCADE
+    FOREIGN KEY(wish_list_id) REFERENCES wish_lists(id) ON DELETE CASCADE
 );
 
 

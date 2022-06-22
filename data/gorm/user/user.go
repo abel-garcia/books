@@ -2,26 +2,9 @@
 
 import (
 	"context"
-	"database/sql"
 
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
-
-type Store struct {
-	db *gorm.DB
-}
-
-// New constructor to store structure
-func New(db *sql.DB) *Store {
-	gormDB, _ := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}))
-
-	return &Store{
-		db: gormDB,
-	}
-}
 
 func Create(ctx context.Context, db *gorm.DB, user *User) error {
 	return db.Create(user).Error

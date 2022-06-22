@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/wackGarcia/books/domain/book"
 	"github.com/wackGarcia/books/domain/user"
+	"github.com/wackGarcia/books/domain/wishlist"
 )
 
 const (
@@ -14,8 +15,9 @@ const (
 
 // Set up services from domain ->
 type Handler struct {
-	User *user.Service
-	Book *book.Service
+	User     *user.Service
+	Book     *book.Service
+	WishList *wishlist.Service
 }
 
 func (handler Handler) Http() http.Handler {
@@ -30,9 +32,16 @@ func (handler Handler) Http() http.Handler {
 		group.POST("/user", handler.UserCreateHandler())
 
 		// BOOKS ENPOINTS
+		group.POST("/book", handler.BookCreateHandler())
+
 		group.GET("/book/:bookID", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusAccepted, gin.H{"status": "ok"})
 		})
+
+		// WISHLIST ENDPOINTS
+		group.POST("/wishlist", handler.WishListCreateHandler())
+		group.GET("/wishlist/:wishlistID", handler.WishListFindHandler())
+		group.GET("/wishlist", handler.WishListFindHandler())
 	}
 
 	return server

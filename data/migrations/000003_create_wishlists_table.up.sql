@@ -1,6 +1,6 @@
 CREATE TYPE wishlist_status AS ENUM ('active', 'removed');
 
-CREATE TABLE IF NOT EXISTS wishlists(
+CREATE TABLE IF NOT EXISTS wish_lists(
 	id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
 	name VARCHAR (50) NOT NULL,
     status wishlist_status NOT NULL DEFAULT 'active',
@@ -15,6 +15,6 @@ CREATE TABLE IF NOT EXISTS wishlists(
 * Create trigger to call set_timestamp fucntion
 */
 CREATE TRIGGER set_timestamp
-BEFORE UPDATE ON wishlists
+BEFORE UPDATE ON wish_lists
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp()

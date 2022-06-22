@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS users(
 */
 
 type User struct {
-	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4():primary_key"`
 	UserName  string
 	Password  string
 	CreatedAt time.Time

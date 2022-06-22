@@ -38,7 +38,7 @@ func New(db *sql.DB) *Store {
 
 func (store *Store) Create(ctx context.Context, book *domain.Book) error {
 	exists, err := gormBook.FindByGoogleID(ctx, store.db, book.GoogleID)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		appErr := domainErrors.NewAppError(errors.Wrap(err, selectError), domainErrors.RepositoryError)
 		return appErr
 	}
@@ -55,7 +55,7 @@ func (store *Store) Create(ctx context.Context, book *domain.Book) error {
 		Title:      book.Title,
 		Publisher:  book.Publisher,
 		UserID:     uuid.MustParse(book.UserID),
-		WishListID: uuid.MustParse(book.WishlistID),
+		WishListID: nil, //uuid.MustParse(book.WishlistID),
 	}
 	if err := gormBook.Create(ctx, store.db, gormBookSchema); err != nil {
 		appErr := domainErrors.NewAppError(errors.Wrap(err, createError), domainErrors.RepositoryError)
