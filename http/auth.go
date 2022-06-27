@@ -10,14 +10,23 @@ import (
 	"github.com/wackGarcia/books/utils/cryptography"
 )
 
-type AuthRequest struct {
-	UserName string `binding:"required,userName" json:"username"`
-	Password string `binding:"required,gte=8,lte=20" json:"password"`
+type AuthResponse struct {
+	AuthToken string `json:"auth_token"`
 }
 
+// Authentication godoc
+// @Summary Authenticate an user.
+// @Description This endpoint authenticates users registered in the books API.
+// @Tags users
+// @Accept application/json
+// @Produce json
+// @Param auth body UserRequest{} true "authtenticate user struct"
+// @Success 200 {object} AuthResponse{}
+// @Failure 400,403,500
+// @Router /auth [post]
 func (h Handler) AuthHandler() func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		var json UserCreateRequest
+		var json UserRequest
 
 		if err := ctx.ShouldBindJSON(&json); err != nil {
 			appError := domainErrors.NewAppErrorWithType(domainErrors.ValidationError)
@@ -46,8 +55,8 @@ func (h Handler) AuthHandler() func(ctx *gin.Context) {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, gin.H{
-			"token": token,
+		ctx.JSON(http.StatusOK, &AuthResponse{
+			AuthToken: token,
 		})
 
 	}

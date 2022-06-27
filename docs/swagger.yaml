@@ -1,0 +1,341 @@
+basePath: /v1
+definitions:
+  http.AuthResponse:
+    properties:
+      auth_token:
+        type: string
+    type: object
+  http.BookCreateRequest:
+    properties:
+      author:
+        maxLength: 50
+        minLength: 3
+        type: string
+      google_id:
+        type: string
+      publisher:
+        maxLength: 50
+        minLength: 3
+        type: string
+      title:
+        maxLength: 50
+        minLength: 3
+        type: string
+      whislist_id:
+        type: string
+    required:
+    - author
+    - google_id
+    - publisher
+    - title
+    type: object
+  http.UserRequest:
+    properties:
+      password:
+        maxLength: 20
+        minLength: 8
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  http.WishListCreateRequest:
+    properties:
+      name:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  http.WishListResponse:
+    properties:
+      created_at:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: integer
+      user_id:
+        type: string
+    type: object
+info:
+  contact:
+    email: abelgarcia38348@gmail.com
+    name: API Support
+  description: This API expose the methods to manage the book lits. A MELI challenge.
+  license:
+    name: MIT License
+    url: https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt
+  title: Challenge Books API
+  version: "1.0"
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint authenticates users registered in the books API.
+      parameters:
+      - description: authtenticate user struct
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/http.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.AuthResponse'
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "500":
+          description: ""
+      summary: Authenticate an user.
+      tags:
+      - users
+  /book:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows create books.
+      parameters:
+      - description: create book struct
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/http.BookCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "500":
+          description: ""
+      summary: Create book.
+      tags:
+      - books
+  /google/book/:apikey:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint allows find books using the `GOOGLE API`.
+      parameters:
+      - description: AIzaSyBhW1SGJWkF4KSo3QOhLpFYA0c_IQSVQ14
+        in: path
+        name: apikey
+        required: true
+        type: string
+      - description: clean architecture
+        in: query
+        name: query
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: google
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "500":
+          description: ""
+      summary: Find any book Google.
+      tags:
+      - Google books
+  /health:
+    get:
+      consumes:
+      - '*/*'
+      description: get the status of server.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Show the status of server.
+      tags:
+      - root
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint registries users to use the API..
+      parameters:
+      - description: create user struct
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/http.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: Create a new user.
+      tags:
+      - users
+  /wishlist:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint allows delet a specific `Book WishList` this remove
+        all books in relation to.
+      parameters:
+      - description: 49c88b9c-e324-42cf-802f-897f5b16cd37
+        in: path
+        name: wishlistID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "500":
+          description: ""
+      summary: Delete book wishlist.
+      tags:
+      - wishlist
+    get:
+      consumes:
+      - application/json
+      description: This endpoint allows find a specific `Book WishList` by ID or get
+        all `Book WishList` by user.
+      parameters:
+      - description: 49c88b9c-e324-42cf-802f-897f5b16cd37
+        in: path
+        name: ID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/http.WishListResponse'
+            type: array
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "500":
+          description: ""
+      summary: Find book wishlist.
+      tags:
+      - wishlist
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows create a new book wishlist.
+      parameters:
+      - description: create whislist struct
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/http.WishListCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.WishListResponse'
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "409":
+          description: ""
+        "500":
+          description: ""
+      summary: Create a new book wishlist.
+      tags:
+      - wishlist
+  /wishlist/:wishlistID/book/:bookID:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint allows delete a specific book from an wishlist.
+      parameters:
+      - description: 49c88b9c-e324-42cf-802f-897f5b16cd37
+        in: path
+        name: wishlistID
+        type: string
+      - description: 49c88b9c-e324-42cf-802f-897f5b16cd37
+        in: path
+        name: bookID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "500":
+          description: ""
+      summary: Delete an specific book from wishlist.
+      tags:
+      - wishlist book
+    post:
+      description: This endpoint allows to add books to wishlist.
+      parameters:
+      - description: 49c88b9c-e324-42cf-802f-897f5b16cd37
+        in: path
+        name: wishlistID
+        type: string
+      - description: 49c88b9c-e324-42cf-802f-897f5b16cd37
+        in: path
+        name: bookID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "409":
+          description: ""
+        "500":
+          description: ""
+      summary: Add a new book to wishlist.
+      tags:
+      - wishlist book
+schemes:
+- http
+- https
+swagger: "2.0"

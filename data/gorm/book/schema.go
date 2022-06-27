@@ -5,7 +5,6 @@ import (
 
 	"github.com/google/uuid"
 	userSchema "github.com/wackGarcia/books/data/gorm/user"
-	wishListSchema "github.com/wackGarcia/books/data/gorm/wishlist"
 )
 
 /*
@@ -24,16 +23,14 @@ import (
 */
 
 type Book struct {
-	Id         uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4():primary_key"`
-	GoogleID   string
-	Author     string
-	Title      string
-	Status     *string
-	Publisher  string
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	UserID     uuid.UUID
-	WishListID *uuid.UUID
-	User       userSchema.User         `gorm:"foreignKey:UserID"`
-	WishList   wishListSchema.WishList `gorm:"foreignKey:WishListID"`
+	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4():primary_key"`
+	GoogleID  string
+	Author    string
+	Title     string
+	Status    string `gorm:"default:active"`
+	Publisher string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	UserID    uuid.UUID
+	User      userSchema.User `gorm:"foreignKey:UserID"`
 }

@@ -17,6 +17,7 @@ import (
 const (
 	selectError = "Error finding book"
 	createError = "Error creating book"
+	existsError = "Error book exists"
 )
 
 // Store struct with psql database instances
@@ -36,39 +37,67 @@ func New(db *sql.DB) *Store {
 	}
 }
 
-func (store *Store) Create(ctx context.Context, book *domain.Book) error {
-	exists, err := gormBook.FindByGoogleID(ctx, store.db, book.GoogleID)
+func (store *Store) Create(ctx context.Context, book *domain.Book) (string, error) {
+	where := map[string]interface{}{"google_id": book.GoogleID, "user_id": book.UserID}
+	exists, err := gormBook.Find(ctx, store.db, where)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		appErr := domainErrors.NewAppError(errors.Wrap(err, selectError), domainErrors.RepositoryError)
-		return appErr
+		return "", appErr
 	}
 
 	if exists != nil {
-		err := errors.New("book exists")
+		err := errors.New(existsError)
 		appErr := domainErrors.NewAppError(errors.Wrap(err, createError), domainErrors.ResourceAlreadyExists)
-		return appErr
+		return "", appErr
 	}
 
 	gormBookSchema := &gormBook.Book{
-		GoogleID:   book.GoogleID,
-		Author:     book.Author,
-		Title:      book.Title,
-		Publisher:  book.Publisher,
-		UserID:     uuid.MustParse(book.UserID),
-		WishListID: nil, //uuid.MustParse(book.WishlistID),
+		GoogleID:  book.GoogleID,
+		Author:    book.Author,
+		Title:     book.Title,
+		Publisher: book.Publisher,
+		UserID:    uuid.MustParse(book.UserID),
 	}
-	if err := gormBook.Create(ctx, store.db, gormBookSchema); err != nil {
+
+	bookID, err := gormBook.Create(ctx, store.db, gormBookSchema)
+	if err != nil {
 		appErr := domainErrors.NewAppError(errors.Wrap(err, createError), domainErrors.RepositoryError)
-		return appErr
+		return "", appErr
 	}
 
-	return nil
-}
-
-func (store *Store) Get(ctx context.Context, bookID string) (*domain.Book, error) {
-	return nil, nil
+	return bookID.String(), nil
 }
 
 func (store *Store) GetAll(ctx context.Context, book *domain.Book) ([]domain.Book, error) {
-	return nil, nil
+
+	wishlists, err := gormBook.FindAll(ctx, store.db, &gormBook.Book{
+		Author:    book.Author,
+		Publisher: book.Publisher,
+		GoogleID:  book.GoogleID,
+	}, book.WishlistID)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		appErr := domainErrors.NewAppError(errors.Wrap(err, selectError), domainErrors.RepositoryError)
+		return nil, appErr
+	}
+
+	values := []domain.Book{}
+	for _, v := range wishlists {
+		values = append(values, domain.Book{
+			ID:        v.ID.String(),
+			GoogleID:  v.GoogleID,
+			Author:    v.Author,
+			Title:     v.Title,
+			Status:    v.Status,
+			Publisher: v.Publisher,
+			UserID:    v.UserID.String(),
+			CreatedAt: v.CreatedAt.Unix(),
+			UpdatedAt: v.CreatedAt.Unix(),
+		})
+	}
+
+	return values, nil
+}
+
+func (store *Store) Delete(ctx context.Context, bookID, userID string) error {
+	return nil
 }

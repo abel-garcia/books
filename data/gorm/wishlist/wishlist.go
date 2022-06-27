@@ -32,3 +32,12 @@ func FindAll(ctx context.Context, db *gorm.DB, where interface{}) ([]WishList, e
 
 	return wishlist, nil
 }
+
+func Delete(ctx context.Context, db *gorm.DB, where interface{}) (*uuid.UUID, error) {
+	wishlist := &WishList{}
+	if err := db.Where(where).Delete(wishlist).Error; err != nil {
+		return nil, err
+	}
+
+	return &wishlist.ID, nil
+}

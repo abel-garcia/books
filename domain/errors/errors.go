@@ -83,3 +83,16 @@ func NewAppErrorWithType(errType string) *AppError {
 func (appErr *AppError) Error() string {
 	return appErr.Err.Error()
 }
+
+// String converts the app type to a human-readable string.
+
+func ParseToErrorApp(err error) *AppError {
+	parsedError := &AppError{}
+	if ok := errors.As(err, &parsedError); !ok {
+		return &AppError{
+			Err:  err,
+			Type: unknownErrorMessage,
+		}
+	}
+	return parsedError
+}
