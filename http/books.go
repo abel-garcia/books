@@ -27,6 +27,9 @@ type BookCreateRequest struct {
 // @Param user body BookCreateRequest{} true "create book struct"
 // @Success 201
 // @Failure 400,403,500
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 // @Router /book [post]
 func (h Handler) BookCreateHandler() func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
@@ -59,6 +62,23 @@ func (h Handler) BookCreateHandler() func(ctx *gin.Context) {
 	}
 }
 
+// Find Book godoc
+// @Summary Find book.
+// @Description This endpoint allows find books.
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param   google_id     query    string     false        "id google"
+// @Param    author    query    string     false        "author"
+// @Param    title    query    string     false        "title"
+// @Param    publisher    query    string     false        "publisher"
+// @Param    wish_list_id    query    string     false        "wish_list_id"
+// @Success 200
+// @Failure 400,403,500
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @Router /book [get]
 func (h Handler) BookFindHandler() func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 
@@ -87,6 +107,16 @@ func (h Handler) BookFindHandler() func(ctx *gin.Context) {
 	}
 }
 
+// Delete Book godoc
+// @Summary Delete book.
+// @Description This endpoint allows delete a specific book.
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param   bookID    path    string     false        "49c88b9c-e324-42cf-802f-897f5b16cd37"
+// @Success 200
+// @Failure 400,403,500
+// @Router /book [delete]
 func (h Handler) BookDeleteHandaler() func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		bookID := ctx.Param("bookID")

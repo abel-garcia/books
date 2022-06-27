@@ -12,5 +12,22 @@ services:
       POSTGRES_USER: ${BOOKS_STORAGE_USER}
       POSTGRES_PASSWORD: ${BOOKS_STORAGE_PASSWORD}
       POSTGRES_DB: ${BOOKS_STORAGE_NAME}
+    volumes: 
+      - ./data/migrations/:/docker-entrypoint-initdb.d/:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "-U dev_local", "-d dev_local"]
+  
+  api:
+    container_name: books_api
+    build: .
+    restart: always
+    ports:
+      - "8989:8989/tcp"
+    environment:
+      BOOKS_HTTPSERVER: 8989
+      BOOKS_STORAGE_USER: books
+      BOOKS_STORAGE_PASSWORD: 123456
+      BOOKS_STORAGE_HOST: db
+      BOOKS_STORAGE_PORT: 5432
+      BOOKS_STORAGE_NAME: books
+      BOOKS_GOOGLE_API: https://www.googleapis.com/books/v1/

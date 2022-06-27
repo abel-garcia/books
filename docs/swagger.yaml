@@ -103,6 +103,68 @@ paths:
       tags:
       - users
   /book:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint allows delete a specific book.
+      parameters:
+      - description: 49c88b9c-e324-42cf-802f-897f5b16cd37
+        in: path
+        name: bookID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "500":
+          description: ""
+      summary: Delete book.
+      tags:
+      - books
+    get:
+      consumes:
+      - application/json
+      description: This endpoint allows find books.
+      parameters:
+      - description: id google
+        in: query
+        name: google_id
+        type: string
+      - description: author
+        in: query
+        name: author
+        type: string
+      - description: title
+        in: query
+        name: title
+        type: string
+      - description: publisher
+        in: query
+        name: publisher
+        type: string
+      - description: wish_list_id
+        in: query
+        name: wish_list_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+        "403":
+          description: ""
+        "500":
+          description: ""
+      summary: Find book.
+      tags:
+      - books
     post:
       consumes:
       - application/json

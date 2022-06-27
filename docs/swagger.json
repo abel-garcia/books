@@ -63,6 +63,65 @@
             }
         },
         "/book": {
+            "get": {
+                "description": "This endpoint allows find books.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Find book.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id google",
+                        "name": "google_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "author",
+                        "name": "author",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "publisher",
+                        "name": "publisher",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "wish_list_id",
+                        "name": "wish_list_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "403": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            },
             "post": {
                 "description": "This endpoint allows create books.",
                 "consumes": [
@@ -88,6 +147,41 @@
                 ],
                 "responses": {
                     "201": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "403": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "description": "This endpoint allows delete a specific book.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Delete book.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "49c88b9c-e324-42cf-802f-897f5b16cd37",
+                        "name": "bookID",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
                         "description": ""
                     },
                     "400": {
