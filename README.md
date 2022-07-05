@@ -1,6 +1,11 @@
 # books
 Challenge 
 
+Arquitecture project [DDD](https://en.wikipedia.org/wiki/Domain-driven_design)
+
+![image](https://bozdag.dev/common/onion-architecture.png)
+
+
 set up environment variables
 ```bash
 export BOOKS_HTTPSERVER=8989
